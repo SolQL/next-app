@@ -2,28 +2,11 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
-import getArtifacts from '../solql/getArtifacts'
-import { QueryArtifact } from '../solql/QueryArtifact'
 import { Artifact } from 'hardhat/types'
+import serialisedArtifacts from "../solql-artifacts.json";
 
-
-export async function getStaticProps() {
-  const hardhatArtifacts = await getArtifacts(["Query"]);
-  return {
-    props: {
-      hardhatArtifact: hardhatArtifacts[0]
-    }
-  };
-}
-
-type HomeProps = {
-  hardhatArtifact: Artifact
-}
-
-const Home: NextPage<HomeProps> = ({hardhatArtifact}) => {
-
-  const query = new QueryArtifact(hardhatArtifact);
-  query.constructAndRun([2,15]);
+const Home: NextPage= () => {
+  const artifacts: Artifact[] = serialisedArtifacts;
 
   return (
     <div className={styles.container}>
