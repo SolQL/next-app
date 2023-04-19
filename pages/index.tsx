@@ -1,9 +1,33 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-const Home: NextPage = ({data}) => {
+import getArtifacts from '../solql/getArtifacts'
+import { QueryArtifact } from '../solql/QueryArtifact'
+
+
+export async function getStaticProps() {
+  const hardhatArtifacts = await getArtifacts(["Query"]);
+  return {
+    props: {
+      hardhatArtifact: hardhatArtifacts[0]
+    }
+  };
+}
+
+
+const Home: NextPage = ({hardhatArtifact}) => {
+
+  const { address, isConnected } = useAccount();
+  const { connect } = useConnect({
+    connector: new InjectedConnector()
+  })
+  connect();
+
+
+  const query = new QueryArtifact(hardhatArtifact);
+  query.constructAndRun([2,15]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,21 +37,13 @@ const Home: NextPage = ({data}) => {
       </Head>
 
       <main className={styles.main}>
-        {data}
+        {address}
       </main>
     </div>
   )
 }
 
-export async function getStaticProps() {
-  const hre: HardhatRuntimeEnvironment = require("hardhat");
-  const bytecode = hre.artifacts.readArtifactSync("Query").bytecode;
-  
-  return {
-    props: {
-      data: bytecode
-    }
-  }
-}
+
+
 
 export default Home
