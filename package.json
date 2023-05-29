@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@solql/hardhat": "^0.0.2",
     "ethers": "^5.7.2",
     "next": "13.1.6",
     "react": "18.2.0",

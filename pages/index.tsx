@@ -4,9 +4,15 @@ import styles from '../styles/Home.module.css'
 
 import { Artifact } from 'hardhat/types'
 import serialisedArtifacts from "../solql-artifacts.json";
+import { ArtifactGetter, ArtifactMapping } from '@solql/hardhat';
 
 const Home: NextPage= () => {
   const artifacts: Artifact[] = serialisedArtifacts;
+  const test = new ArtifactGetter()
+  test.getMapping().then((mapping: ArtifactMapping) => {
+    console.log("Here is the mapping");
+    console.log(mapping["queries/Query.sol:Query"].abi)
+  })
 
   return (
     <div className={styles.container}>
